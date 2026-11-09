@@ -15,14 +15,13 @@ export class App implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {}
 
-  products: {} = {};
+  products: [] = [];
 
   ngOnInit(): void {
     this.http.get('/data.json').subscribe(res => {
-      this.products = res
       console.log(res)
       this.cdr.detectChanges()
     })
