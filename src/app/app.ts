@@ -18,10 +18,11 @@ export class App implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  products: [] = [];
+  products: {} = {};
 
   ngOnInit(): void {
     this.http.get('/data.json').subscribe(res => {
+      this.products = res
       console.log(res)
       this.cdr.detectChanges()
     })
