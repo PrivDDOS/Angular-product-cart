@@ -1,7 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
+interface ProductImages {
+  thumbnail: string;
+  mobile: string;
+  tablet: string;
+  desktop: string;
+}
+
+interface Product {
+  image: ProductImages;
+  name: string;
+  category: string;
+  price: number;
+}
 
 @Component({
   selector: 'app-root',
@@ -13,17 +27,19 @@ import { HttpClient } from '@angular/common/http';
 export class App implements OnInit {
   protected readonly title = signal('Angular-product-cart');
 
-  constructor(
-    private http: HttpClient,
-    private cdr: ChangeDetectorRef,
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  products: [] = [];
+  products: Product[] = [];
 
   ngOnInit(): void {
-    this.http.get('/data.json').subscribe(res => {
-      console.log(res)
-      this.cdr.detectChanges()
+    this.http.get<Product[]>('/data.json').subscribe({
+      next: (products) => {
+        this.products = products;
+        console.log(this.products)
+      },
+      error: (error) => {
+        console.error('Failed to load products from /data.json', error);
+      }
     })
   }
 }
