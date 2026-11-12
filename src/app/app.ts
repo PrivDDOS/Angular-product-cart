@@ -30,6 +30,7 @@ export class App implements OnInit {
   constructor(private http: HttpClient) {}
 
   products: Product[] = [];
+  quantity: number = 0;
 
   ngOnInit(): void {
     this.http.get<Product[]>('/data.json').subscribe({
